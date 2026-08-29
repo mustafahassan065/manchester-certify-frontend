@@ -195,7 +195,7 @@ export default function HomePage() {
 
           {/* ---- Services strip embedded at hero bottom ---- */}
          <div className="relative z-10 max-w-content mx-auto px-6 -mt-6">
-            <Reveal>
+            
               <div className="bg-navy-dark/95 backdrop-blur-sm border-2 border-b-0 border-gold/60 rounded-t-2xl grid sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gold/30">
                 {services.map(({ code, title, desc, Icon }) => (
                   <div key={code} className="group p-8">
@@ -209,7 +209,7 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
-            </Reveal>
+            
           </div>
         </section>
 
