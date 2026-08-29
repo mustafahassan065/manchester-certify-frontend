@@ -195,22 +195,24 @@ export default function HomePage() {
 
           {/* ---- Services strip embedded at hero bottom ---- */}
          <div className="relative z-10 max-w-content mx-auto px-6 -mt-6">
-            
-              <div className="bg-navy-dark/95 backdrop-blur-sm border-2 border-b-0 border-gold/60 rounded-t-2xl grid sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gold/30">
-                {services.map(({ code, title, desc, Icon }) => (
-                  <div key={code} className="group p-8">
-                    <Icon size={38} strokeWidth={1.6} className="text-gold mb-5" />
-                    <p className="text-gold text-xs font-bold tracking-widest mb-1">{code}</p>
-                    <h3 className="text-white font-bold text-lg mb-3 leading-snug">{title}</h3>
-                    <p className="text-white/60 text-sm leading-relaxed mb-5">{desc}</p>
-                    <a href="#" className="inline-flex items-center gap-1.5 text-gold text-xs font-bold tracking-wide group-hover:gap-3 transition-all duration-300">
-                      LEARN MORE <ArrowRight size={14} />
-                    </a>
-                  </div>
-                ))}
-              </div>
-            
-          </div>
+  <div
+    className={`bg-navy-dark border-2 border-b-0 border-gold/60 rounded-t-2xl grid sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gold/30 transition-all duration-700 delay-500 ${
+      mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+    }`}
+  >
+    {services.map(({ code, title, desc, Icon }) => (
+      <div key={code} className="group p-8">
+        <Icon size={38} strokeWidth={1.6} className="text-gold mb-5" />
+        <p className="text-gold text-xs font-bold tracking-widest mb-1">{code}</p>
+        <h3 className="text-white font-bold text-lg mb-3 leading-snug">{title}</h3>
+        <p className="text-white/60 text-sm leading-relaxed mb-5">{desc}</p>
+        <a href="#" className="inline-flex items-center gap-1.5 text-gold text-xs font-bold tracking-wide group-hover:gap-3 transition-all duration-300">
+          LEARN MORE <ArrowRight size={14} />
+        </a>
+      </div>
+    ))}
+  </div>
+</div>
         </section>
 
         {/* ================= ABOUT + WHY CHOOSE US ================= */}
