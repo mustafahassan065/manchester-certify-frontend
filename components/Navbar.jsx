@@ -17,7 +17,7 @@ const navLinks = [
     ],
   },
   { label: 'How It Works', href: '/how-it-works' },
-  { label: 'Pricing', href: '/pricing' },
+  { label: 'FAQs', href: '/faqs' },
   { label: 'Contact Us', href: '/contact' },
 ];
 
@@ -25,6 +25,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -33,6 +34,11 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const closeMobile = () => {
+    setMobileOpen(false);
+    setMobileServicesOpen(false);
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -40,7 +46,7 @@ export default function Navbar() {
       }`}
     >
       <nav className="max-w-content mx-auto px-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 shrink-0">
+        <Link href="/" className="flex items-center gap-3 shrink-0" onClick={closeMobile}>
           <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
             <path d="M4 36V16L12 10V36" stroke="#D69C4D" strokeWidth="2.2" strokeLinejoin="round" />
             <path d="M12 36V6L20 2V36" stroke="#D69C4D" strokeWidth="2.2" strokeLinejoin="round" />
@@ -54,6 +60,7 @@ export default function Navbar() {
           </span>
         </Link>
 
+        {/* Desktop nav */}
         <ul className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
             <li
@@ -95,22 +102,63 @@ export default function Navbar() {
           BOOK APPOINTMENT
         </Link>
 
-        <button className="lg:hidden text-white" aria-label="Toggle menu" onClick={() => setMobileOpen((v) => !v)}>
+        <button
+          className="lg:hidden text-white"
+          aria-label="Toggle menu"
+          onClick={() => setMobileOpen((v) => !v)}
+        >
           {mobileOpen ? '✕' : '☰'}
         </button>
       </nav>
 
-      <div className={`lg:hidden overflow-hidden transition-[max-height] duration-300 bg-navy ${mobileOpen ? 'max-h-[600px]' : 'max-h-0'}`}>
+      {/* Mobile nav */}
+      <div className={`lg:hidden overflow-hidden transition-[max-height] duration-300 bg-navy ${mobileOpen ? 'max-h-[700px] overflow-y-auto' : 'max-h-0'}`}>
         <ul className="px-6 py-4 flex flex-col gap-1">
-          {navLinks.map((link) => (
-            <li key={link.label}>
-              <Link href={link.href} className="block py-2.5 text-white/90 font-semibold text-sm border-b border-white/10" onClick={() => setMobileOpen(false)}>
-                {link.label}
-              </Link>
-            </li>
-          ))}
+          {navLinks.map((link) =>
+            link.children ? (
+              <li key={link.label} className="border-b border-white/10">
+                <button
+                  className="w-full flex items-center justify-between py-2.5 text-white/90 font-semibold text-sm"
+                  onClick={() => setMobileServicesOpen((v) => !v)}
+                  aria-expanded={mobileServicesOpen}
+                >
+                  {link.label}
+                  <span className={`text-xs transition-transform duration-200 ${mobileServicesOpen ? 'rotate-180' : ''}`}>▾</span>
+                </button>
+                <div className={`overflow-hidden transition-[max-height] duration-300 ${mobileServicesOpen ? 'max-h-96' : 'max-h-0'}`}>
+                  <ul className="pb-2 pl-4 flex flex-col gap-1">
+                    {link.children.map((child) => (
+                      <li key={child.label}>
+                        <Link
+                          href={child.href}
+                          className="block py-2 text-white/70 text-sm hover:text-gold transition-colors"
+                          onClick={closeMobile}
+                        >
+                          {child.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ) : (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  className="block py-2.5 text-white/90 font-semibold text-sm border-b border-white/10"
+                  onClick={closeMobile}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            )
+          )}
           <li className="pt-3">
-            <Link href="/booking" className="block text-center border-2 border-gold text-gold font-bold text-sm px-5 py-2.5 rounded" onClick={() => setMobileOpen(false)}>
+            <Link
+              href="/booking"
+              className="block text-center border-2 border-gold text-gold font-bold text-sm px-5 py-2.5 rounded"
+              onClick={closeMobile}
+            >
               BOOK APPOINTMENT
             </Link>
           </li>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -9,82 +9,6 @@ import {
   BadgeCheck, Users, FileText, Building2, Star, ArrowRight, Plus,
   Phone, Mail, MapPin,
 } from 'lucide-react';
-
-/* ---------- Reveal ---------- */
-function Reveal({ children, delay = 0, className = '' }) {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) {
-      el.classList.add('is-visible');
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('is-visible');
-          else entry.target.classList.remove('is-visible');
-        });
-      },
-      { threshold: 0.2, rootMargin: '0px 0px -100px 0px' }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const delayClass = delay > 0 ? `reveal-delay-${delay}` : '';
-  return (
-    <div ref={ref} className={`reveal ${delayClass} ${className}`}>
-      {children}
-    </div>
-  );
-}
-
-/* ---------- Counter ---------- */
-function Counter({ value, suffix }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const started = useRef(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !started.current) {
-            started.current = true;
-            const duration = 1500;
-            const start = performance.now();
-            const step = (now) => {
-              const progress = Math.min((now - start) / duration, 1);
-              const eased = 1 - Math.pow(1 - progress, 3);
-              setCount(Math.floor(eased * value));
-              if (progress < 1) requestAnimationFrame(step);
-              else setCount(value);
-            };
-            requestAnimationFrame(step);
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [value]);
-
-  return (
-    <span ref={ref} className="text-4xl sm:text-5xl font-extrabold text-white tabular-nums">
-      {count}{suffix}
-    </span>
-  );
-}
 
 /* ---------- Data ---------- */
 const services = [
@@ -166,59 +90,59 @@ export default function HomePage() {
             </div>
 
             <div className={`hidden lg:flex justify-center transition-all duration-1000 delay-300 ${mounted ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-  <svg width="280" height="320" viewBox="0 0 260 300" fill="none" className="animate-float">
-    <defs>
-      <linearGradient id="shieldEdge" x1="20" y1="10" x2="240" y2="290" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#FFF3DC" />
-        <stop offset="50%" stopColor="#D69C4D" />
-        <stop offset="100%" stopColor="#B87F35" />
-      </linearGradient>
-    </defs>
-    <path
-      d="M130 10L240 50V150C240 220 190 270 130 290C70 270 20 220 20 150V50L130 10Z"
-      stroke="url(#shieldEdge)"
-      strokeWidth="4"
-      fill="rgba(214,156,77,0.05)"
-      className="drop-shadow-[0_0_22px_rgba(214,156,77,0.7)]"
-    />
-    <path
-      d="M85 150l30 32 62-66"
-      stroke="url(#shieldEdge)"
-      strokeWidth="9"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="drop-shadow-[0_0_16px_rgba(214,156,77,0.8)]"
-    />
-  </svg>
-</div>
+              <svg width="280" height="320" viewBox="0 0 260 300" fill="none" className="animate-float">
+                <defs>
+                  <linearGradient id="shieldEdge" x1="20" y1="10" x2="240" y2="290" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#FFF3DC" />
+                    <stop offset="50%" stopColor="#D69C4D" />
+                    <stop offset="100%" stopColor="#B87F35" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M130 10L240 50V150C240 220 190 270 130 290C70 270 20 220 20 150V50L130 10Z"
+                  stroke="url(#shieldEdge)"
+                  strokeWidth="4"
+                  fill="rgba(214,156,77,0.05)"
+                  className="drop-shadow-[0_0_22px_rgba(214,156,77,0.7)]"
+                />
+                <path
+                  d="M85 150l30 32 62-66"
+                  stroke="url(#shieldEdge)"
+                  strokeWidth="9"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="drop-shadow-[0_0_16px_rgba(214,156,77,0.8)]"
+                />
+              </svg>
+            </div>
           </div>
 
           {/* ---- Services strip embedded at hero bottom ---- */}
-         <div className="relative z-10 max-w-content mx-auto px-6 -mt-6">
-  <div
-    className={`bg-navy-dark border-2 border-b-0 border-gold/60 rounded-t-2xl grid sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gold/30 transition-all duration-700 delay-500 ${
-      mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-    }`}
-  >
-    {services.map(({ code, title, desc, Icon }) => (
-      <div key={code} className="group p-8">
-        <Icon size={38} strokeWidth={1.6} className="text-gold mb-5" />
-        <p className="text-gold text-xs font-bold tracking-widest mb-1">{code}</p>
-        <h3 className="text-white font-bold text-lg mb-3 leading-snug">{title}</h3>
-        <p className="text-white/60 text-sm leading-relaxed mb-5">{desc}</p>
-        <a href="#" className="inline-flex items-center gap-1.5 text-gold text-xs font-bold tracking-wide group-hover:gap-3 transition-all duration-300">
-          LEARN MORE <ArrowRight size={14} />
-        </a>
-      </div>
-    ))}
-  </div>
-</div>
+          <div className="relative z-10 max-w-content mx-auto px-6 -mt-6">
+            <div
+              className={`bg-navy-dark border-2 border-b-0 border-gold/60 rounded-t-2xl grid sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gold/30 transition-all duration-700 delay-500 ${
+                mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}
+            >
+              {services.map(({ code, title, desc, Icon }) => (
+                <div key={code} className="group p-8">
+                  <Icon size={38} strokeWidth={1.6} className="text-gold mb-5" />
+                  <p className="text-gold text-xs font-bold tracking-widest mb-1">{code}</p>
+                  <h3 className="text-white font-bold text-lg mb-3 leading-snug">{title}</h3>
+                  <p className="text-white/60 text-sm leading-relaxed mb-5">{desc}</p>
+                  <a href="#" className="inline-flex items-center gap-1.5 text-gold text-xs font-bold tracking-wide group-hover:gap-3 transition-all duration-300">
+                    LEARN MORE <ArrowRight size={14} />
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
         {/* ================= ABOUT + WHY CHOOSE US ================= */}
         <section className="bg-white py-24">
           <div className="max-w-content mx-auto px-6 grid lg:grid-cols-[0.85fr_1.15fr] gap-16">
-            <Reveal>
+            <div>
               <p className="text-gold-dark text-sm font-bold tracking-[0.25em] mb-3">ABOUT US</p>
               <h2 className="font-sans text-3xl sm:text-4xl font-extrabold text-navy leading-tight mb-5">
                 Your Local Compliance Experts in Manchester
@@ -233,21 +157,19 @@ export default function HomePage() {
               <Link href="/about" className="inline-block bg-navy text-white font-bold text-sm tracking-wide px-7 py-3.5 rounded hover:bg-navy-light transition-colors duration-200">
                 LEARN MORE ABOUT US
               </Link>
-            </Reveal>
+            </div>
 
             <div>
-              <Reveal delay={1}>
-                <p className="text-gold-dark text-sm font-bold tracking-[0.25em] mb-6">WHY CHOOSE US?</p>
-              </Reveal>
+              <p className="text-gold-dark text-sm font-bold tracking-[0.25em] mb-6">WHY CHOOSE US?</p>
               <div className="grid sm:grid-cols-3 gap-x-8 gap-y-9">
-                {whyChooseUs.map(({ title, desc, Icon }, i) => (
-                  <Reveal key={title} delay={(i % 4) + 1} className="flex gap-3.5">
+                {whyChooseUs.map(({ title, desc, Icon }) => (
+                  <div key={title} className="flex gap-3.5">
                     <Icon size={26} strokeWidth={1.6} className="text-gold shrink-0 mt-0.5" />
                     <div>
                       <p className="text-navy font-bold text-sm mb-1">{title}</p>
                       <p className="text-navy/60 text-xs leading-relaxed">{desc}</p>
                     </div>
-                  </Reveal>
+                  </div>
                 ))}
               </div>
             </div>
@@ -257,16 +179,16 @@ export default function HomePage() {
         {/* ================= STATS ================= */}
         <section className="relative bg-navy-dark py-16 border-y border-white/10 overflow-hidden">
           <div className="relative max-w-content mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-10">
-            {stats.map(({ label, value, suffix, Icon }, i) => (
-              <Reveal key={label} delay={(i % 4) + 1} className="flex items-center gap-4">
+            {stats.map(({ label, value, suffix, Icon }) => (
+              <div key={label} className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0">
                   <Icon size={26} strokeWidth={1.8} className="text-gold" />
                 </div>
                 <div>
-                  <Counter value={value} suffix={suffix} />
+                  <span className="text-4xl sm:text-5xl font-extrabold text-white tabular-nums">{value}{suffix}</span>
                   <p className="text-white/55 text-xs font-semibold tracking-wide mt-1">{label}</p>
                 </div>
-              </Reveal>
+              </div>
             ))}
           </div>
         </section>
@@ -274,99 +196,99 @@ export default function HomePage() {
         {/* ================= FAQ ================= */}
         <section className="bg-white py-24">
           <div className="max-w-content mx-auto px-6 max-w-3xl">
-            <Reveal className="text-center mb-14">
+            <div className="text-center mb-14">
               <p className="text-gold-dark text-sm font-bold tracking-[0.3em] mb-3">FAQS</p>
               <h2 className="font-sans text-3xl sm:text-4xl font-extrabold text-navy">Frequently Asked Questions</h2>
-            </Reveal>
+            </div>
 
             <div className="space-y-3">
               {faqs.map((item, i) => {
                 const isOpen = openFaq === i;
                 return (
-                  <Reveal key={item.q} delay={(i % 4) + 1}>
-                    <div className={`border rounded-lg overflow-hidden transition-colors duration-300 ${isOpen ? 'border-gold/50 bg-gold/[0.03]' : 'border-navy/10'}`}>
-                      <button onClick={() => setOpenFaq(isOpen ? -1 : i)} className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left" aria-expanded={isOpen}>
-                        <span className="font-bold text-navy text-sm sm:text-base">{item.q}</span>
-                        <span className={`shrink-0 w-7 h-7 rounded-full border border-gold flex items-center justify-center transition-transform duration-300 ${isOpen ? 'rotate-45 bg-gold' : ''}`}>
-                          <Plus size={14} className={isOpen ? 'text-white' : 'text-gold'} />
-                        </span>
-                      </button>
-                      <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-                        <div className="overflow-hidden">
-                          <p className="px-6 pb-5 text-navy/60 text-sm leading-relaxed">{item.a}</p>
-                        </div>
+                  <div key={item.q} className={`border rounded-lg overflow-hidden transition-colors duration-300 ${isOpen ? 'border-gold/50 bg-gold/[0.03]' : 'border-navy/10'}`}>
+                    <button onClick={() => setOpenFaq(isOpen ? -1 : i)} className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left" aria-expanded={isOpen}>
+                      <span className="font-bold text-navy text-sm sm:text-base">{item.q}</span>
+                      <span className={`shrink-0 w-7 h-7 rounded-full border border-gold flex items-center justify-center transition-transform duration-300 ${isOpen ? 'rotate-45 bg-gold' : ''}`}>
+                        <Plus size={14} className={isOpen ? 'text-white' : 'text-gold'} />
+                      </span>
+                    </button>
+                    <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <p className="px-6 pb-5 text-navy/60 text-sm leading-relaxed">{item.a}</p>
                       </div>
                     </div>
-                  </Reveal>
+                  </div>
                 );
               })}
             </div>
           </div>
-        </section>{/* ================= CONTACT ================= */}
-<section className="bg-navy py-24">
-  <div className="max-w-content mx-auto px-6 grid lg:grid-cols-2 gap-16 items-start">
-    <Reveal>
-      <p className="text-gold text-sm font-bold tracking-[0.3em] mb-3">CONTACT US</p>
-      <h2 className="font-sans text-3xl sm:text-4xl font-extrabold text-white mb-5 leading-tight">
-        Get In Touch With Our Team
-      </h2>
-      <p className="text-white/60 leading-relaxed mb-10 max-w-md">
-        Have a question or ready to book? Send us a message and one of our certified assessors will get back to you shortly.
-      </p>
+        </section>
 
-      <div className="space-y-6">
-        {[
-          { label: 'Call Us', value: '020 7946 0958', Icon: Phone },
-          { label: 'Email Us', value: 'info@manchestercertify.co.uk', Icon: Mail },
-          { label: 'Visit Us', value: 'Manchester, United Kingdom', Icon: MapPin },
-        ].map(({ label, value, Icon }) => (
-          <div key={label} className="flex items-center gap-4">
-            <Icon size={22} strokeWidth={1.8} className="text-gold shrink-0" />
+        {/* ================= CONTACT ================= */}
+        <section className="bg-navy py-24">
+          <div className="max-w-content mx-auto px-6 grid lg:grid-cols-2 gap-16 items-start">
             <div>
-              <p className="text-white/45 text-xs tracking-wide">{label}</p>
-              <p className="text-white font-semibold text-sm">{value}</p>
+              <p className="text-gold text-sm font-bold tracking-[0.3em] mb-3">CONTACT US</p>
+              <h2 className="font-sans text-3xl sm:text-4xl font-extrabold text-white mb-5 leading-tight">
+                Get In Touch With Our Team
+              </h2>
+              <p className="text-white/60 leading-relaxed mb-10 max-w-md">
+                Have a question or ready to book? Send us a message and one of our certified assessors will get back to you shortly.
+              </p>
+
+              <div className="space-y-6">
+                {[
+                  { label: 'Call Us', value: '020 7946 0958', Icon: Phone },
+                  { label: 'Email Us', value: 'info@manchestercertify.co.uk', Icon: Mail },
+                  { label: 'Visit Us', value: 'Manchester, United Kingdom', Icon: MapPin },
+                ].map(({ label, value, Icon }) => (
+                  <div key={label} className="flex items-center gap-4">
+                    <Icon size={22} strokeWidth={1.8} className="text-gold shrink-0" />
+                    <div>
+                      <p className="text-white/45 text-xs tracking-wide">{label}</p>
+                      <p className="text-white font-semibold text-sm">{value}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-2xl">
+              <form className="space-y-5">
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-navy text-xs font-bold tracking-wide mb-2">FULL NAME</label>
+                    <input type="text" className="w-full border border-navy/15 rounded px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold transition-shadow" placeholder="John Smith" />
+                  </div>
+                  <div>
+                    <label className="block text-navy text-xs font-bold tracking-wide mb-2">PHONE</label>
+                    <input type="tel" className="w-full border border-navy/15 rounded px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold transition-shadow" placeholder="07000 000000" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-navy text-xs font-bold tracking-wide mb-2">EMAIL</label>
+                  <input type="email" className="w-full border border-navy/15 rounded px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold transition-shadow" placeholder="you@example.com" />
+                </div>
+                <div>
+                  <label className="block text-navy text-xs font-bold tracking-wide mb-2">SERVICE NEEDED</label>
+                  <select className="w-full border border-navy/15 rounded px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold transition-shadow">
+                    <option>EPC Certificate</option>
+                    <option>EICR Report</option>
+                    <option>Floor Plan</option>
+                    <option>Property Compliance</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-navy text-xs font-bold tracking-wide mb-2">MESSAGE</label>
+                  <textarea rows={4} className="w-full border border-navy/15 rounded px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold resize-none transition-shadow" placeholder="Tell us about your property..." />
+                </div>
+                <button type="submit" className="w-full bg-gold text-navy font-bold text-sm tracking-wide py-4 rounded hover:bg-navy hover:text-white transition-colors duration-300">
+                  SEND MESSAGE
+                </button>
+              </form>
             </div>
           </div>
-        ))}
-      </div>
-    </Reveal>
-
-    <Reveal delay={1} className="bg-white rounded-xl p-8 shadow-2xl">
-      <form className="space-y-5">
-        <div className="grid sm:grid-cols-2 gap-5">
-          <div>
-            <label className="block text-navy text-xs font-bold tracking-wide mb-2">FULL NAME</label>
-            <input type="text" className="w-full border border-navy/15 rounded px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold transition-shadow" placeholder="John Smith" />
-          </div>
-          <div>
-            <label className="block text-navy text-xs font-bold tracking-wide mb-2">PHONE</label>
-            <input type="tel" className="w-full border border-navy/15 rounded px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold transition-shadow" placeholder="07000 000000" />
-          </div>
-        </div>
-        <div>
-          <label className="block text-navy text-xs font-bold tracking-wide mb-2">EMAIL</label>
-          <input type="email" className="w-full border border-navy/15 rounded px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold transition-shadow" placeholder="you@example.com" />
-        </div>
-        <div>
-          <label className="block text-navy text-xs font-bold tracking-wide mb-2">SERVICE NEEDED</label>
-          <select className="w-full border border-navy/15 rounded px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold transition-shadow">
-            <option>EPC Certificate</option>
-            <option>EICR Report</option>
-            <option>Floor Plan</option>
-            <option>Property Compliance</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-navy text-xs font-bold tracking-wide mb-2">MESSAGE</label>
-          <textarea rows={4} className="w-full border border-navy/15 rounded px-4 py-3 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold resize-none transition-shadow" placeholder="Tell us about your property..." />
-        </div>
-        <button type="submit" className="w-full bg-gold text-navy font-bold text-sm tracking-wide py-4 rounded hover:bg-navy hover:text-white transition-colors duration-300">
-          SEND MESSAGE
-        </button>
-      </form>
-    </Reveal>
-  </div>
-</section>
+        </section>
       </main>
 
       <Footer />

@@ -1,46 +1,15 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 
-
-function Reveal({ children, delay = 0, className = '' }) {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) { el.classList.add('is-visible'); return; }
-
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => {
-        if (entry.isIntersecting) entry.target.classList.add('is-visible');
-        else entry.target.classList.remove('is-visible');
-      }),
-      { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const delayClass = delay > 0 ? `reveal-delay-${delay}` : '';
-  return <div ref={ref} className={`reveal ${delayClass} ${className}`}>{children}</div>;
-}
-
-
-
-const quickLinks = ['Home', 'About Us', 'Services', 'How It Works', 'Pricing', 'Contact Us'];
+const quickLinks = ['Home', 'About Us', 'Services', 'How It Works', 'FAQs', 'Contact Us'];
 const ourServices = ['EPC Certificates', 'EICR Reports', 'Floor Plans', 'Property Compliance'];
 const information = ['Terms & Conditions', 'Privacy Policy', 'Cookie Policy', 'Sitemap'];
 
 export default function Footer() {
   return (
     <footer className="bg-navy">
-      {/* Trust bar */}
-
-
-      <Reveal className="max-w-content mx-auto px-6 py-14 grid sm:grid-cols-2 lg:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr_1fr] gap-10">
+      <div className="max-w-content mx-auto px-6 py-14 grid sm:grid-cols-2 lg:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr_1fr] gap-10">
         <div>
           <Link href="/" className="flex items-center gap-2 mb-4">
             <svg width="26" height="26" viewBox="0 0 40 40" fill="none">
@@ -79,12 +48,11 @@ export default function Footer() {
             <li>Manchester, United Kingdom</li>
           </ul>
         </div>
-      </Reveal>
+      </div>
 
       <div className="border-t border-white/10">
         <div className="max-w-content mx-auto px-6 py-5 flex flex-col sm:flex-row justify-between gap-2 text-white/40 text-xs">
           <p>© {new Date().getFullYear()} Manchester Certify. All rights reserved.</p>
-          
         </div>
       </div>
     </footer>
