@@ -170,7 +170,7 @@ export default function EpcPage() {
   </div>
 </section>
         {/* UNDERSTANDING YOUR RATING */}
-        <section className="bg-white py-24 border-t border-navy/5">
+        <section className="bg-white py-16 border-t border-navy/5">
           <div className="max-w-content mx-auto px-6">
             <div className="text-center max-w-xl mx-auto mb-16">
               <p className="text-gold-dark text-sm font-bold tracking-[0.25em] mb-3">UNDERSTANDING YOUR RATING</p>
