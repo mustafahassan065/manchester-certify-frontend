@@ -99,7 +99,7 @@ export default function EpcPage() {
       <Navbar />
       <main>
         {/* HERO */}
-<section className="relative bg-navy pt-32 pb-0 overflow-hidden min-h-[92vh] flex flex-col">
+<section className="relative bg-navy pt-28 sm:pt-32 pb-0 overflow-hidden min-h-screen sm:min-h-[92vh] flex flex-col">
   <div className="absolute inset-0 z-0">
     <img
       src="https://images.unsplash.com/photo-1513584684374-8bab748fbf90?fm=jpg&q=80&w=2600&auto=format&fit=crop"
@@ -110,27 +110,27 @@ export default function EpcPage() {
     <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/10 to-transparent" />
   </div>
 
-  <div className="relative z-10 flex-1 flex items-center max-w-content mx-auto px-6 w-full">
-    <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-14 items-center w-full">
+  <div className="relative z-10 flex-1 flex items-center max-w-content mx-auto px-6 pt-8 sm:pt-0 w-full">
+    <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-14 items-center w-full">
       <div>
-        <p className={`text-gold text-sm font-bold tracking-[0.3em] mb-5 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        <p className={`text-gold text-xs sm:text-sm font-bold tracking-[0.3em] mb-4 sm:mb-5 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           EPC CERTIFICATES
         </p>
-        <h1 className={`font-sans text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold text-white mb-6 leading-tight transition-all duration-700 delay-100 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <h1 className={`font-sans text-3xl sm:text-5xl lg:text-[3.6rem] font-extrabold text-white mb-5 sm:mb-6 leading-[1.15] sm:leading-tight transition-all duration-700 delay-100 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           Energy Performance
           <br />
           <span className="text-gold">Certificates, Done Right</span>
         </h1>
-        <p className={`text-white/85 text-lg max-w-xl mb-9 leading-relaxed transition-all duration-700 delay-200 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <p className={`text-white/85 text-base sm:text-lg max-w-xl mb-7 sm:mb-9 leading-relaxed transition-all duration-700 delay-200 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           A legal requirement for every sale and letting. Fast, accurate assessments from fully
           accredited domestic energy assessors, with clear recommendations to improve your rating.
         </p>
 
-        <div className={`flex flex-wrap gap-4 transition-all duration-700 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-          <Link href="/booking" className="inline-flex items-center gap-2 bg-gold text-navy font-bold text-sm tracking-wide px-8 py-4 rounded-md hover:bg-gold-light transition-colors duration-300">
+        <div className={`flex flex-wrap gap-3 sm:gap-4 transition-all duration-700 delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+          <Link href="/booking" className="inline-flex items-center gap-2 bg-gold text-navy font-bold text-sm tracking-wide px-6 py-3.5 sm:px-8 sm:py-4 rounded-md hover:bg-gold-light transition-colors duration-300">
             BOOK AN APPOINTMENT <ArrowRight size={16} />
           </Link>
-          <Link href="/quote" className="inline-flex items-center gap-2 border-2 border-white/50 text-white font-bold text-sm tracking-wide px-8 py-4 rounded-md hover:border-gold hover:text-gold transition-colors duration-300">
+          <Link href="/quote" className="inline-flex items-center gap-2 border-2 border-white/50 text-white font-bold text-sm tracking-wide px-6 py-3.5 sm:px-8 sm:py-4 rounded-md hover:border-gold hover:text-gold transition-colors duration-300">
             GET A QUOTE
           </Link>
         </div>
@@ -144,10 +144,10 @@ export default function EpcPage() {
     </div>
   </div>
 
-  {/* Feature strip — plain, dominant icon + text, no card background */}
-  <div className="relative z-10 max-w-content mx-auto px-6 pb-14">
+  {/* Feature strip */}
+  <div className="relative z-10 max-w-content mx-auto px-6 pb-10 sm:pb-14">
     <div
-      className={`grid sm:grid-cols-3 gap-8 transition-all duration-700 delay-500 ${
+      className={`grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 transition-all duration-700 delay-500 ${
         mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
       }`}
     >
