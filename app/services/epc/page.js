@@ -99,7 +99,7 @@ export default function EpcPage() {
       <Navbar />
       <main>
        {/* HERO */}
-<section className="relative bg-navy pt-28 sm:pt-32 pb-0 overflow-hidden min-h-screen sm:min-h-[92vh] flex flex-col">
+<section className="relative bg-navy pt-32 sm:pt-40 pb-0 overflow-hidden min-h-screen sm:min-h-[92vh] flex flex-col">
   <div className="absolute inset-0 z-0">
     <img
       src="https://images.unsplash.com/photo-1513584684374-8bab748fbf90?fm=jpg&q=80&w=2600&auto=format&fit=crop"
