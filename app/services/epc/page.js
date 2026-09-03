@@ -98,7 +98,7 @@ export default function EpcPage() {
     <>
       <Navbar />
       <main>
-        {/* HERO */}
+       {/* HERO */}
 <section className="relative bg-navy pt-28 sm:pt-32 pb-0 overflow-hidden min-h-screen sm:min-h-[92vh] flex flex-col">
   <div className="absolute inset-0 z-0">
     <img
@@ -169,6 +169,8 @@ export default function EpcPage() {
     </div>
   </div>
 </section>
+
+
         {/* UNDERSTANDING YOUR RATING */}
         <section className="bg-white py-16 border-t border-navy/5">
           <div className="max-w-content mx-auto px-6">
