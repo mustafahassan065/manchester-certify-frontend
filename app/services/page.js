@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import {
-  Home, Zap, LayoutGrid, BadgeCheck, ArrowRight, CheckCircle2, Plus,
+  Home, Zap, LayoutGrid, Wind, ArrowRight, CheckCircle2, Plus,
   Users, FileText, Building2, Star,
 } from 'lucide-react';
 
@@ -52,7 +52,7 @@ const services = [
   { slug: 'epc', code: 'EPC', title: 'Energy Performance Certificates', desc: 'A legal requirement for selling or letting any property. Our assessors deliver accurate, compliant EPCs fast.', Icon: Home },
   { slug: 'eicr', code: 'EICR', title: 'Electrical Installation Condition Reports', desc: 'Full electrical safety testing and certification for landlords, homeowners and businesses.', Icon: Zap },
   { slug: 'floor-plans', code: 'FLOOR PLANS', title: 'Floor Plan Services', desc: 'Precise, professionally drawn floor plans for sales listings, lettings and planning applications.', Icon: LayoutGrid },
-  { slug: 'compliance', code: 'COMPLIANCE', title: 'Property Compliance', desc: 'A complete compliance package covering every certificate and check your property needs.', Icon: BadgeCheck },
+  { slug: 'compliance', code: 'AIR TESTING', title: 'Part L Air Leakage Testing', desc: 'Air pressure testing to confirm your building meets Part L air tightness and compliance standards.', Icon: Wind }
 ];
 
 const process = [

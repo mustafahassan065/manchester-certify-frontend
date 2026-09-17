@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import {
   ShieldCheck, Clock, PoundSterling, Headset, Home, Zap, LayoutGrid,
-  BadgeCheck, Users, FileText, Building2, Star, ArrowRight, Plus,
+  Wind, Users, FileText, Building2, Star, ArrowRight, Plus,
   Phone, Mail, MapPin,
 } from 'lucide-react';
 
@@ -15,7 +15,7 @@ const services = [
   { code: 'EPC', title: 'Energy Performance Certificates', desc: 'Fast, reliable EPC assessments for residential and commercial properties.', Icon: Home },
   { code: 'EICR', title: 'Electrical Installation Condition Reports', desc: 'Ensuring your electrical systems are safe and compliant with regulations.', Icon: Zap },
   { code: 'FLOOR PLAN', title: 'Floor Plan Services', desc: 'Accurate, professional floor plans for sales, lettings and planning purposes.', Icon: LayoutGrid },
-  { code: 'CERTIFIED', title: 'Qualified. Insured. Trusted.', desc: 'All reports are carried out by qualified professionals and delivered promptly.', Icon: BadgeCheck },
+  { code: 'AIR TESTING', title: 'Part L Air Leakage Testing', desc: 'Air pressure testing to confirm building air tightness meets Part L compliance standards.', Icon: Wind },
 ];
 
 const whyChooseUs = [
