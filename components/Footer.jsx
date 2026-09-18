@@ -37,6 +37,23 @@ export default function Footer() {
         </div>
 
         <FooterCol title="Quick Links" items={quickLinks} />
+        {/* Assessor CTAs */}
+<div className="border-t border-white/10">
+  <div className="max-w-content mx-auto px-6 py-6 flex flex-wrap items-center justify-center gap-4">
+    <Link
+      href="/assessor/apply"
+      className="inline-flex items-center gap-2 border-2 border-gold text-gold font-bold text-sm px-6 py-2.5 rounded hover:bg-gold hover:text-navy transition-colors duration-200"
+    >
+      Become an Assessor
+    </Link>
+    <Link
+      href="/assessor/login"
+      className="inline-flex items-center gap-2 text-white/70 font-semibold text-sm px-6 py-2.5 rounded border border-white/20 hover:border-gold hover:text-gold transition-colors duration-200"
+    >
+      Assessor Login
+    </Link>
+  </div>
+</div>
         <FooterCol title="Our Services" items={ourServices} />
         <FooterCol title="Information" items={information} />
 
