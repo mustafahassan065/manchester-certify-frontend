@@ -5,7 +5,7 @@ import AdminGuard from '@/components/admin/AdminGuard';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { api } from '@/lib/api';
-import { Search, Eye, X } from 'lucide-react';
+import { Search, Eye, X, Send, Clock, CheckCircle2, XCircle } from 'lucide-react';
 
 const STATUS_OPTIONS = ['pending', 'pending_payment', 'confirmed', 'assigned', 'in_progress', 'completed', 'cancelled'];
 
@@ -35,12 +35,6 @@ export default function AdminAppointmentsPage() {
 
   async function updateStatus(id, status) {
     await api.patch(`/admin/appointments/${id}/status`, { status });
-    load();
-    setSelected(null);
-  }
-
-  async function assignAssessor(id, assessorId) {
-    await api.patch(`/admin/appointments/${id}/assign`, { assessorId });
     load();
     setSelected(null);
   }
@@ -121,20 +115,56 @@ export default function AdminAppointmentsPage() {
           assessors={assessors}
           onClose={() => setSelected(null)}
           onUpdateStatus={updateStatus}
-          onAssign={assignAssessor}
+          onChanged={load}
         />
       )}
     </AdminGuard>
   );
 }
 
-function AppointmentModal({ appointment, assessors, onClose, onUpdateStatus, onAssign }) {
+function AppointmentModal({ appointment, assessors, onClose, onUpdateStatus, onChanged }) {
   const [status, setStatus] = useState(appointment.status);
-  const [assessorId, setAssessorId] = useState(appointment.assessor_id || '');
+  const [selectedAssessors, setSelectedAssessors] = useState([]);
+  const [offers, setOffers] = useState([]);
+  const [loadingOffers, setLoadingOffers] = useState(true);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
+
+  function loadOffers() {
+    setLoadingOffers(true);
+    api.get(`/admin/job-offers/appointment/${appointment.id}`)
+      .then((data) => setOffers(data.offers))
+      .finally(() => setLoadingOffers(false));
+  }
+
+  useEffect(() => { loadOffers(); }, []);
+
+  function toggleAssessor(id) {
+    setSelectedAssessors((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
+  }
+
+  async function sendOffer() {
+    if (selectedAssessors.length === 0) return;
+    setSending(true);
+    setError('');
+    try {
+      await api.post('/admin/job-offers', { appointmentId: appointment.id, assessorIds: selectedAssessors });
+      setSelectedAssessors([]);
+      loadOffers();
+      onChanged();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSending(false);
+    }
+  }
+
+  const alreadyAssigned = !!appointment.assessor_id;
+  const availableAssessors = assessors.filter((a) => !offers.some((o) => o.assessor_id === a.id && o.status === 'offered'));
 
   return (
     <div className="fixed inset-0 bg-navy/50 flex items-center justify-center z-50 p-6">
-      <div className="bg-white rounded-2xl max-w-lg w-full p-8 relative">
+      <div className="bg-white rounded-2xl max-w-lg w-full p-8 relative max-h-[90vh] overflow-y-auto">
         <button onClick={onClose} className="absolute top-6 right-6 text-navy/40 hover:text-navy">
           <X size={20} />
         </button>
@@ -146,9 +176,10 @@ function AppointmentModal({ appointment, assessors, onClose, onUpdateStatus, onA
           <Row label="Date" value={`${appointment.appointment_date} · ${appointment.time_slot}`} />
           <Row label="Property" value={appointment.property_address} />
           <Row label="Price" value={`£${appointment.price}`} />
+          <Row label="Assessor" value={appointment.assessor_name || 'Unassigned'} />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-6">
           <label className="block text-navy text-xs font-bold tracking-wide mb-2">STATUS</label>
           <div className="flex gap-2">
             <select value={status} onChange={(e) => setStatus(e.target.value)} className="flex-1 border border-navy/15 rounded px-3 py-2.5 text-sm">
@@ -160,21 +191,55 @@ function AppointmentModal({ appointment, assessors, onClose, onUpdateStatus, onA
           </div>
         </div>
 
-        <div>
-          <label className="block text-navy text-xs font-bold tracking-wide mb-2">ASSIGN ASSESSOR</label>
-          <div className="flex gap-2">
-            <select value={assessorId} onChange={(e) => setAssessorId(e.target.value)} className="flex-1 border border-navy/15 rounded px-3 py-2.5 text-sm">
-              <option value="">Select assessor</option>
-              {assessors.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
-            </select>
-            <button
-              onClick={() => assessorId && onAssign(appointment.id, assessorId)}
-              className="bg-gold text-navy text-sm font-semibold px-4 rounded hover:bg-gold-light"
-            >
-              Assign
-            </button>
-          </div>
-        </div>
+        {!alreadyAssigned && (
+          <>
+            <div className="mb-5">
+              <label className="block text-navy text-xs font-bold tracking-wide mb-2">
+                OFFER JOB TO ASSESSORS (first to accept wins)
+              </label>
+              <div className="max-h-36 overflow-y-auto border border-navy/10 rounded-lg p-2 space-y-1">
+                {availableAssessors.length === 0 && <p className="text-navy/40 text-xs p-2">No available assessors to offer.</p>}
+                {availableAssessors.map((a) => (
+                  <label key={a.id} className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-navy/5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedAssessors.includes(a.id)}
+                      onChange={() => toggleAssessor(a.id)}
+                      className="accent-navy"
+                    />
+                    <span className="text-sm text-navy">{a.name}</span>
+                    <span className="text-xs text-navy/40">{a.specialization}</span>
+                  </label>
+                ))}
+              </div>
+              {error && <p className="text-red-600 text-xs mt-2">{error}</p>}
+              <button
+                onClick={sendOffer}
+                disabled={sending || selectedAssessors.length === 0}
+                className="mt-3 w-full flex items-center justify-center gap-2 bg-gold text-navy text-sm font-semibold py-2.5 rounded hover:bg-gold-light disabled:opacity-50"
+              >
+                <Send size={14} /> {sending ? 'Sending...' : `Send Offer to ${selectedAssessors.length || ''} Assessor${selectedAssessors.length === 1 ? '' : 's'}`}
+              </button>
+            </div>
+
+            <div>
+              <p className="text-navy text-xs font-bold tracking-wide mb-2">OFFER HISTORY</p>
+              {loadingOffers && <p className="text-navy/40 text-xs">Loading...</p>}
+              {!loadingOffers && offers.length === 0 && <p className="text-navy/40 text-xs">No offers sent yet.</p>}
+              <div className="space-y-2">
+                {offers.map((o) => (
+                  <div key={o.id} className="flex items-center justify-between border border-navy/10 rounded-lg px-3 py-2">
+                    <div>
+                      <p className="text-navy text-sm font-medium">{o.assessor_name}</p>
+                      <p className="text-navy/40 text-xs">{new Date(o.offered_at).toLocaleString('en-GB')}</p>
+                    </div>
+                    <OfferStatusBadge status={o.status} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -202,6 +267,22 @@ function StatusBadge({ status }) {
   return (
     <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full ${styles[status] || 'bg-gray-100 text-gray-700'}`}>
       {status.replace('_', ' ')}
+    </span>
+  );
+}
+
+function OfferStatusBadge({ status }) {
+  const config = {
+    offered: { icon: Clock, style: 'bg-yellow-100 text-yellow-700' },
+    accepted: { icon: CheckCircle2, style: 'bg-emerald-100 text-emerald-700' },
+    declined: { icon: XCircle, style: 'bg-gray-100 text-gray-600' },
+    expired: { icon: XCircle, style: 'bg-gray-100 text-gray-500' },
+  }[status] || { icon: Clock, style: 'bg-gray-100 text-gray-600' };
+
+  const Icon = config.icon;
+  return (
+    <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full ${config.style}`}>
+      <Icon size={12} /> {status}
     </span>
   );
 }

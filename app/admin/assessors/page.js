@@ -7,6 +7,9 @@ import AdminHeader from '@/components/admin/AdminHeader';
 import { api } from '@/lib/api';
 import { Search, Plus, ToggleLeft, ToggleRight, Key, Trash2, X, Eye } from 'lucide-react';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const BACKEND_ORIGIN = API_URL.replace('/api', '');
+
 export default function AdminAssessorsPage() {
   const [assessors, setAssessors] = useState([]);
   const [search, setSearch] = useState('');
@@ -212,14 +215,43 @@ function AssessorJobsModal({ id, onClose }) {
     api.get(`/admin/assessors/${id}`).then(setData);
   }, [id]);
 
+  const docStyle = {
+    valid: 'bg-emerald-100 text-emerald-700',
+    expiring_soon: 'bg-yellow-100 text-yellow-700',
+    expired: 'bg-red-100 text-red-700',
+  };
+
   return (
     <div className="fixed inset-0 bg-navy/50 flex items-center justify-center z-50 p-6">
-      <div className="bg-white rounded-2xl max-w-lg w-full p-8 relative max-h-[80vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl max-w-lg w-full p-8 relative max-h-[85vh] overflow-y-auto">
         <button onClick={onClose} className="absolute top-6 right-6 text-navy/40 hover:text-navy"><X size={20} /></button>
         {!data ? <p className="text-navy/40">Loading...</p> : (
           <>
             <h2 className="font-bold text-xl text-navy mb-1">{data.assessor.name}</h2>
-            <p className="text-navy/50 text-sm mb-6">{data.assessor.email} · {data.assessor.specialization || 'General'}</p>
+            <p className="text-navy/50 text-sm mb-1">{data.assessor.email} · {data.assessor.specialization || 'General'}</p>
+            <p className="text-navy/40 text-xs mb-6">
+              Areas: {data.assessor.postcode_areas ? data.assessor.postcode_areas.split(',').join(', ') : '—'} ·
+              Max {data.assessor.max_distance_miles || 25} miles
+              {data.assessor.standard_rate ? ` · Rate £${Number(data.assessor.standard_rate).toFixed(2)}` : ''}
+            </p>
+
+            <h3 className="font-bold text-navy text-sm mb-3">Qualifications &amp; Documents</h3>
+            <div className="space-y-2 mb-6">
+              {data.documents.length === 0 && <p className="text-navy/40 text-sm">No documents uploaded yet.</p>}
+              {data.documents.map((d) => (
+                <div key={d.id} className="flex items-center justify-between gap-3 border border-navy/10 rounded-lg p-3">
+                  <div className="min-w-0">
+                    <p className="text-navy font-medium text-sm truncate">{d.document_type}</p>
+                    <p className="text-navy/40 text-xs">
+                      {d.reference_number ? `Ref: ${d.reference_number} · ` : ''}
+                      {d.expiry_date ? `Expires ${new Date(d.expiry_date + 'T00:00:00').toLocaleDateString('en-GB')}` : 'No expiry'}
+                    </p>
+                  </div>
+                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${docStyle[d.status]}`}>{d.status.replace('_', ' ')}</span>
+                  <a href={`${BACKEND_ORIGIN}${d.file_path}`} target="_blank" rel="noreferrer" className="text-xs font-semibold text-navy underline">View</a>
+                </div>
+              ))}
+            </div>
 
             <h3 className="font-bold text-navy text-sm mb-3">Job History</h3>
             <div className="space-y-2">
@@ -230,7 +262,7 @@ function AssessorJobsModal({ id, onClose }) {
                     <span className="text-navy font-medium text-sm">{j.service_name}</span>
                     <span className="text-xs font-semibold text-navy/50 capitalize">{j.status.replace('_', ' ')}</span>
                   </div>
-                  <p className="text-navy/50 text-xs mt-1">{j.customer_name} — {j.appointment_date} · {j.time_slot}</p>
+                  <p className="text-navy/50 text-xs mt-1">{j.customer_name} — {new Date(j.appointment_date).toLocaleDateString('en-GB')} · {j.time_slot}</p>
                   <p className="text-navy/40 text-xs">{j.property_address}</p>
                 </div>
               ))}

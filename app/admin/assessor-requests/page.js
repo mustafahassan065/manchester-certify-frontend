@@ -36,8 +36,7 @@ export default function AssessorRequestsPage() {
             <div className="flex gap-2 mb-6">
               {['pending', 'approved', 'rejected', ''].map((s) => (
                 <button
-                  key={s || 'all'}
-                  onClick={() => setStatusFilter(s)}
+                  key={s || 'all'} onClick={() => setStatusFilter(s)}
                   className={`text-sm font-semibold px-4 py-2 rounded-lg capitalize ${statusFilter === s ? 'bg-navy text-white' : 'bg-white text-navy/60 border border-navy/10'}`}
                 >
                   {s || 'All'}
@@ -45,14 +44,14 @@ export default function AssessorRequestsPage() {
               ))}
             </div>
 
-            <div className="bg-white rounded-xl border border-navy/5 overflow-hidden">
+            <div className="bg-white rounded-xl border border-navy/5 overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-navy/40 text-xs border-b border-navy/5 bg-navy/[0.02]">
                     <th className="text-left px-6 py-3 font-medium">Name</th>
                     <th className="text-left px-6 py-3 font-medium">Contact</th>
-                    <th className="text-left px-6 py-3 font-medium">Specialization</th>
-                    <th className="text-left px-6 py-3 font-medium">Experience</th>
+                    <th className="text-left px-6 py-3 font-medium">Services</th>
+                    <th className="text-left px-6 py-3 font-medium">Accreditation</th>
                     <th className="text-left px-6 py-3 font-medium">Applied On</th>
                     <th className="text-left px-6 py-3 font-medium">Status</th>
                     <th className="text-left px-6 py-3 font-medium">Actions</th>
@@ -65,8 +64,8 @@ export default function AssessorRequestsPage() {
                     <tr key={r.id} className="border-b border-navy/5 last:border-0 hover:bg-navy/[0.02]">
                       <td className="px-6 py-3 text-navy font-medium">{r.full_name}</td>
                       <td className="px-6 py-3 text-navy/70">{r.email}<br /><span className="text-xs text-navy/40">{r.phone}</span></td>
-                      <td className="px-6 py-3 text-navy/70">{r.specialization || '—'}</td>
-                      <td className="px-6 py-3 text-navy/70">{r.experience_years ? `${r.experience_years} yrs` : '—'}</td>
+                      <td className="px-6 py-3 text-navy/70 max-w-[200px] truncate">{r.services_applied || r.specialization || '—'}</td>
+                      <td className="px-6 py-3 text-navy/70">{r.accreditation_body || '—'}<br /><span className="text-xs text-navy/40">{r.accreditation_number || ''}</span></td>
                       <td className="px-6 py-3 text-navy/70">{new Date(r.created_at).toLocaleDateString('en-GB')}</td>
                       <td className="px-6 py-3"><StatusBadge status={r.status} /></td>
                       <td className="px-6 py-3">
@@ -114,31 +113,37 @@ function RequestDetailModal({ request, onClose, onActioned }) {
 
   return (
     <div className="fixed inset-0 bg-navy/50 flex items-center justify-center z-50 p-6">
-      <div className="bg-white rounded-2xl max-w-lg w-full p-8 relative max-h-[85vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl max-w-lg w-full p-8 relative max-h-[90vh] overflow-y-auto">
         <button onClick={onClose} className="absolute top-6 right-6 text-navy/40 hover:text-navy"><X size={20} /></button>
-        <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center justify-between mb-1 pr-8">
           <h2 className="font-bold text-xl text-navy">{request.full_name}</h2>
           <StatusBadge status={request.status} />
         </div>
         <p className="text-navy/50 text-sm mb-6">{request.email} · {request.phone}</p>
 
         <div className="space-y-3 text-sm mb-6">
-          <Row label="Specialization" value={request.specialization || '—'} />
+          <Row label="Services" value={request.services_applied || request.specialization || '—'} />
+          <Row label="Accreditation body" value={request.accreditation_body || '—'} />
+          <Row label="Accreditation no." value={request.accreditation_number || '—'} />
+          <Row label="Postcode areas" value={request.postcode_areas ? request.postcode_areas.split(',').join(', ') : '—'} />
+          <Row label="Standard rate" value={request.standard_rate ? `£${Number(request.standard_rate).toFixed(2)}` : '—'} />
           <Row label="Experience" value={request.experience_years ? `${request.experience_years} years` : '—'} />
-          <Row label="Qualifications" value={request.qualifications || '—'} />
-          <Row label="Message" value={request.message || '—'} />
+          <Row label="Notes" value={request.message || '—'} />
           <Row label="Applied On" value={new Date(request.created_at).toLocaleDateString('en-GB')} />
         </div>
 
-        {request.cv_file_path && (
-          <a
-            href={`${BACKEND_ORIGIN}${request.cv_file_path}`}
-            target="_blank" rel="noreferrer"
-            className="inline-flex items-center gap-2 text-navy font-semibold text-sm hover:underline mb-6"
-          >
-            <FileText size={16} /> View Uploaded CV
-          </a>
-        )}
+        <div className="flex flex-wrap gap-5 mb-6">
+          {request.accreditation_certificate_path && (
+            <a href={`${BACKEND_ORIGIN}${request.accreditation_certificate_path}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-navy font-semibold text-sm hover:underline">
+              <FileText size={16} /> View Accreditation Certificate
+            </a>
+          )}
+          {request.cv_file_path && (
+            <a href={`${BACKEND_ORIGIN}${request.cv_file_path}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-navy font-semibold text-sm hover:underline">
+              <FileText size={16} /> View CV
+            </a>
+          )}
+        </div>
 
         {request.status === 'pending' && !showApprove && (
           <div className="flex gap-3">
@@ -158,7 +163,7 @@ function RequestDetailModal({ request, onClose, onActioned }) {
               required type="password" value={password} onChange={(e) => setPassword(e.target.value)}
               placeholder="Min. 6 characters" className="w-full border border-navy/15 rounded px-4 py-3 text-sm"
             />
-            <p className="text-navy/40 text-xs">Login credentials will be emailed to {request.email}.</p>
+            <p className="text-navy/40 text-xs">Login credentials will be emailed to {request.email}. Their coverage areas, rate and accreditation certificate are copied to their profile.</p>
             {error && <p className="text-red-600 text-sm">{error}</p>}
             <button type="submit" disabled={saving} className="w-full bg-navy text-white font-bold text-sm py-3 rounded hover:bg-navy-light disabled:opacity-50">
               {saving ? 'Approving...' : 'Confirm Approval & Create Account'}

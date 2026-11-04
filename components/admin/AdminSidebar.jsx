@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard, Calendar, Users, FileText, CreditCard, Tag,
-  UserCog, BarChart3, CalendarDays, Settings, ShieldCheck, LogOut,UserPlus
+  UserCog, BarChart3, CalendarDays, Settings, ShieldCheck, LogOut,UserPlus,Wallet,FileCheck,
 } from 'lucide-react';
 import { clearAdminSession } from '@/lib/auth';
 
@@ -17,10 +17,13 @@ const navItems = [
   { label: 'Services & Pricing', href: '/admin/services', Icon: Tag },
   { label: 'Assessors', href: '/admin/assessors', Icon: UserCog },
   { label: 'Assessor Requests', href: '/admin/assessor-requests', Icon: UserPlus },
+  { label: 'Assessor Payouts', href: '/admin/payouts', Icon: Wallet },
+  { label: 'Assessor Reports', href: '/admin/job-reports', Icon: FileCheck },
   { label: 'Reports', href: '/admin/reports', Icon: BarChart3 },
   { label: 'Calendar', href: '/admin/calendar', Icon: CalendarDays },
   { label: 'Settings', href: '/admin/settings', Icon: Settings },
   { label: 'Admin Users', href: '/admin/users', Icon: ShieldCheck },
+  
 ];
 
 export default function AdminSidebar() {
