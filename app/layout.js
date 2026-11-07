@@ -11,6 +11,11 @@ export const metadata = {
   title: "Manchester Certify | Property Compliance Made Simple",
   description:
     "Professional, reliable EPC, EICR and property compliance certification services across Manchester.",
+  icons: {
+    icon: "/images/minilogo.png",
+    shortcut: "/images/minilogo.png",
+    apple: "/images/minilogo.png",
+  },
 };
 
 export default function RootLayout({ children }) {

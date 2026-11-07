@@ -47,18 +47,18 @@ export default function Navbar() {
     >
       <nav className="max-w-content mx-auto px-6 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 shrink-0" onClick={closeMobile}>
-          <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
-            <path d="M4 36V16L12 10V36" stroke="#D69C4D" strokeWidth="2.2" strokeLinejoin="round" />
-            <path d="M12 36V6L20 2V36" stroke="#D69C4D" strokeWidth="2.2" strokeLinejoin="round" />
-            <path d="M20 36V10L28 4V36" stroke="#D69C4D" strokeWidth="2.2" strokeLinejoin="round" />
-            <path d="M28 36V14L36 8V36" stroke="#D69C4D" strokeWidth="2.2" strokeLinejoin="round" />
-            <line x1="2" y1="36" x2="38" y2="36" stroke="#D69C4D" strokeWidth="2.2" />
-          </svg>
-          <span className="font-display leading-tight">
-            <span className="block text-white text-lg font-bold tracking-wide">MANCHESTER</span>
-            <span className="block text-gold text-sm font-semibold tracking-[0.2em] -mt-1">CERTIFY</span>
-          </span>
-        </Link>
+  <img
+    src="/images/manchesterlogo.jpeg"
+    alt="Manchester Certify Logo"
+    width={40}
+    height={40}
+    className="object-contain"
+  />
+  <span className="font-display leading-tight">
+    <span className="block text-white text-lg font-bold tracking-wide">MANCHESTER</span>
+    <span className="block text-gold text-sm font-semibold tracking-[0.2em] -mt-1">CERTIFY</span>
+  </span>
+</Link>
 
         {/* Desktop nav */}
         <ul className="hidden lg:flex items-center gap-8">
