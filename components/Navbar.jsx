@@ -48,7 +48,7 @@ export default function Navbar() {
       <nav className="max-w-content mx-auto px-6 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 shrink-0" onClick={closeMobile}>
   <img
-    src="/images/manchesterlogo.jpeg"
+    src="/images/manchesterlogo2.png"
     alt="Manchester Certify Logo"
     width={40}
     height={40}
