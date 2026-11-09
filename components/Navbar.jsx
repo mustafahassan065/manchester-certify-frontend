@@ -46,18 +46,12 @@ export default function Navbar() {
       }`}
     >
       <nav className="max-w-content mx-auto px-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 shrink-0" onClick={closeMobile}>
+        <Link href="/" className="flex items-center shrink-0 w-fit" onClick={closeMobile}>
   <img
     src="/images/manchesterlogo2.png"
     alt="Manchester Certify Logo"
-    width={40}
-    height={40}
-    className="object-contain"
+    className="h-6 md:h-8 w-auto object-contain shrink-0"
   />
-  <span className="font-display leading-tight">
-    <span className="block text-white text-lg font-bold tracking-wide">MANCHESTER</span>
-    <span className="block text-gold text-sm font-semibold tracking-[0.2em] -mt-1">CERTIFY</span>
-  </span>
 </Link>
 
         {/* Desktop nav */}
